@@ -127,5 +127,5 @@ func Register(router fiber.Router, database *gorm.DB) {
 	stockRouter.Put("/:id", productHandler.Update)
 	stockRouter.Post("/", productHandler.Create)
 	stockRouter.Delete("/:id", productHandler.Delete)
-
+	
 }
