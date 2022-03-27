@@ -13,7 +13,7 @@ paths:
   /product:
     post:
       tags:
-      - "PRODUCT"
+      - "Product"
       summary: "Create a new Product"
       description: ""
       operationId: "createProduct"

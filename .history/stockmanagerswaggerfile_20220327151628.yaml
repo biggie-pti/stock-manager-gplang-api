@@ -1,0 +1,147 @@
+swagger: "2.0"
+info:
+  description: "Simple swagger for the HTTP requests of a stock management API"
+  version: "1.0.0"
+  title: "Swagger Golang Stock Manager API"
+  contact:
+    email: "bbigwel@gmail.com"
+host: "localhost:5000"
+basePath: "/api"
+schemes:
+- "http"
+paths:
+  /product:
+    post:
+      tags:
+      - "P"
+      summary: "Create a new Product"
+      description: ""
+      operationId: "createProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Product object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateProduct"
+      responses:
+        "200":
+          description: "Product created response"
+          schema:
+            $ref: "#/definitions/Product"
+        "400":
+          description: "Invalid input"
+    get:
+      tags:
+      - "Product"
+      summary: "Get a list of products"
+      description: ""
+      operationId: "getProducts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "List of products"
+          schema:
+            $ref: "#/definitions/ProductList"
+  /product/{id}:
+    get:
+      tags:
+      - "Product"
+      summary: "Get Product by id"
+      description: ""
+      operationId: "Get a single Product by ID"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: integer
+        required: true
+      responses:
+        "200":
+          description: "Product object response"
+          schema:
+            $ref: "#/definitions/Product"
+        "400":
+          description: "Invalid input"
+    put:
+      tags:
+      - "Product"
+      summary: "Update a Product"
+      description: ""
+      operationId: "updateProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: integer
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Product object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateProduct"
+      responses:
+        "200":
+          description: "Updated Product"
+          schema:
+            $ref: "#/definitions/Product"
+    delete:
+      tags:
+      - "Product"
+      summary: "Delete a Product"
+      description: ""
+      operationId: "deleteProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: integer
+        required: true
+      responses:
+        "204":
+          description: "No content"
+definitions:
+  BaseProduct:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "Learn go"
+      description:
+        type: string
+        example: "Should follow a golang tutorial to learn a new language"
+      status:
+        type: string
+        example: "pending"
+  CreateProduct:
+    allOf:
+      - $ref: '#/definitions/BaseProduct'
+  Product:
+    allOf:
+      - type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+      - $ref: '#/definitions/BaseProduct'
+  ProductList:
+    type: array
+    items:
+      $ref: '#/definitions/Product'
