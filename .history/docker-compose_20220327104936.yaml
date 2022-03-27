@@ -1,0 +1,42 @@
+# docker-compose.yaml
+version: "3.7"
+
+services:
+  go-stock-manager:
+    container_name: go-stock-manager
+    image: thisk8brd/go-stock-manager:dev
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+      - "2345:2345"
+    networks:
+      - go-stock-manager-network
+
+networks:
+  go-stock-manager-network:
+    name: go-stock-manager-network
+
+    go-todo-db:
+    container_name: go-todo-db
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - go-todo-network
+
+volumes:
+  postgres-db:
+
+networks:
+  go-todo-network:
+    name: go-todo-network
