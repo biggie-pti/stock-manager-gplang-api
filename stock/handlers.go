@@ -120,7 +120,7 @@ func Register(router fiber.Router, database *gorm.DB) {
 	productRepository := NewProductRepository(database)
 	productHandler := NewProductHandler(productRepository)
 
-	stockRouter := router.Group("/stock")
+	stockRouter := router.Group("/product")
 
 	stockRouter.Get("/", productHandler.GetAll)
 	stockRouter.Get("/:id", productHandler.Get)
