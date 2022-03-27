@@ -1,8 +1,11 @@
+// main.go
 package main
 
 import (
 	"log"
 
+	"github.com/biggie-pti/stock-manager-gplang-api/database"
+	"github.com/biggie-pti/stock-manager-gplang-api/stock"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -10,13 +13,11 @@ import (
 func main() {
 	app := fiber.New()
 	app.Use(cors.New())
+	database.ConnectDB()
+	defer database.DB.Close()
 
 	api := app.Group("/api")
-
-	// Test handler
-	api.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Go App running in Docker")
-	})
+	stock.Register(api, database.DB)
 
 	log.Fatal(app.Listen(":5000"))
 }
