@@ -222,10 +222,13 @@ func NewServiceHandler(serviceRepository *ServiceRepository) *ServicesHandler {
 	}
 }
 
-func RegisterProduct(router fiber.Router, database *gorm.DB) {
+func Register(router fiber.Router, database *gorm.DB) {
 	database.AutoMigrate(&Product{})
 	productRepository := NewProductRepository(database)
 	productHandler := NewProductHandler(productRepository)
+	database.AutoMigrate(&Service{})
+	serviceRepository := NewServiceRepository(database)
+	servicesHandler := NewServiceHandler(serviceRepository)
 
 	stockRouter := router.Group("/product")
 
@@ -235,20 +238,12 @@ func RegisterProduct(router fiber.Router, database *gorm.DB) {
 	stockRouter.Post("/", productHandler.Create)
 	stockRouter.Delete("/:id", productHandler.Delete)
 
-}
-
-func RegisterService(router fiber.Router, database *gorm.DB) {
-
-	database.AutoMigrate(&Service{})
-	serviceRepository := NewServiceRepository(database)
-	servicesHandler := NewServiceHandler(serviceRepository)
-
 	serviceRouter := router.Group("/service")
 
 	serviceRouter.Get("/", servicesHandler.GetAll)
 	serviceRouter.Get("/:id", servicesHandler.Get)
 	serviceRouter.Put("/:id", servicesHandler.Update)
 	serviceRouter.Post("/", servicesHandler.Create)
-	serviceRouter.Delete("/:id", servicesHandler.DeleteServices)
+	servicesHandler.DeleteService("/:id", servicesHandler.DeleteService)
 
 }

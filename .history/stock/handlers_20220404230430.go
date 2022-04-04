@@ -226,6 +226,9 @@ func RegisterProduct(router fiber.Router, database *gorm.DB) {
 	database.AutoMigrate(&Product{})
 	productRepository := NewProductRepository(database)
 	productHandler := NewProductHandler(productRepository)
+	database.AutoMigrate(&Service{})
+	serviceRepository := NewServiceRepository(database)
+	servicesHandler := NewServiceHandler(serviceRepository)
 
 	stockRouter := router.Group("/product")
 
@@ -235,13 +238,31 @@ func RegisterProduct(router fiber.Router, database *gorm.DB) {
 	stockRouter.Post("/", productHandler.Create)
 	stockRouter.Delete("/:id", productHandler.Delete)
 
+	serviceRouter := router.Group("/service")
+
+	serviceRouter.Get("/", servicesHandler.GetAll)
+	serviceRouter.Get("/:id", servicesHandler.Get)
+	serviceRouter.Put("/:id", servicesHandler.Update)
+	serviceRouter.Post("/", servicesHandler.Create)
+	servicesHandler.DeleteServices("/:id", servicesHandler.DeleteServices)
+
 }
 
-func RegisterService(router fiber.Router, database *gorm.DB) {
-
+func RegisterS(router fiber.Router, database *gorm.DB) {
+	database.AutoMigrate(&Product{})
+	productRepository := NewProductRepository(database)
+	productHandler := NewProductHandler(productRepository)
 	database.AutoMigrate(&Service{})
 	serviceRepository := NewServiceRepository(database)
 	servicesHandler := NewServiceHandler(serviceRepository)
+
+	stockRouter := router.Group("/product")
+
+	stockRouter.Get("/", productHandler.GetAll)
+	stockRouter.Get("/:id", productHandler.Get)
+	stockRouter.Put("/:id", productHandler.Update)
+	stockRouter.Post("/", productHandler.Create)
+	stockRouter.Delete("/:id", productHandler.Delete)
 
 	serviceRouter := router.Group("/service")
 
@@ -249,6 +270,8 @@ func RegisterService(router fiber.Router, database *gorm.DB) {
 	serviceRouter.Get("/:id", servicesHandler.Get)
 	serviceRouter.Put("/:id", servicesHandler.Update)
 	serviceRouter.Post("/", servicesHandler.Create)
-	serviceRouter.Delete("/:id", servicesHandler.DeleteServices)
+	servicesHandler.DeleteServices("/:id", servicesHandler.DeleteServices)
 
 }
+
+

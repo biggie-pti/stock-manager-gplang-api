@@ -35,8 +35,9 @@ func (serviceRepository *ServiceRepository) AddService(service Service) (Service
 	return service, nil
 }
 
-func (serviceRepository *ServiceRepository) Save(user Service) (Service, error) {
-	err := serviceRepository.database.Save(user).Error
+
+func (repository *ProductRepository) Save(user Product) (Product, error) {
+	err := repository.database.Save(user).Error
 	return user, err
 }
 

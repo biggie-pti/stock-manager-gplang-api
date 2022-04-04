@@ -199,7 +199,7 @@ func (handler *ServicesHandler) Update(c *fiber.Ctx) error {
 	return c.JSON(item)
 }
 
-func (handler *ServicesHandler) DeleteServices(c *fiber.Ctx) error {
+func (handler *ServicesHandler) DeleteService(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -222,10 +222,13 @@ func NewServiceHandler(serviceRepository *ServiceRepository) *ServicesHandler {
 	}
 }
 
-func RegisterProduct(router fiber.Router, database *gorm.DB) {
+func Register(router fiber.Router, database *gorm.DB) {
 	database.AutoMigrate(&Product{})
 	productRepository := NewProductRepository(database)
 	productHandler := NewProductHandler(productRepository)
+	database.AutoMigrate(&Service{})
+	serviceRepository := NewServiceRepository(database)
+	servicesHandler := NewServiceHandler(serviceRepository)
 
 	stockRouter := router.Group("/product")
 
@@ -235,20 +238,12 @@ func RegisterProduct(router fiber.Router, database *gorm.DB) {
 	stockRouter.Post("/", productHandler.Create)
 	stockRouter.Delete("/:id", productHandler.Delete)
 
-}
-
-func RegisterService(router fiber.Router, database *gorm.DB) {
-
-	database.AutoMigrate(&Service{})
-	serviceRepository := NewServiceRepository(database)
-	servicesHandler := NewServiceHandler(serviceRepository)
-
 	serviceRouter := router.Group("/service")
 
 	serviceRouter.Get("/", servicesHandler.GetAll)
 	serviceRouter.Get("/:id", servicesHandler.Get)
 	serviceRouter.Put("/:id", servicesHandler.Update)
 	serviceRouter.Post("/", servicesHandler.Create)
-	serviceRouter.Delete("/:id", servicesHandler.DeleteServices)
+	servicesHandler.DeleteService()("/:id", servicesHandler.DeleteService)
 
 }
