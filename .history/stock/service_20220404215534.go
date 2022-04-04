@@ -1,4 +1,3 @@
-// stock/models.go
 package stock
 
 import "github.com/jinzhu/gorm"
@@ -15,4 +14,3 @@ type Product struct {
 	Description string `json:"description"`
 	Status      string `gorm:"Not Null" json:"status"`
 }
-

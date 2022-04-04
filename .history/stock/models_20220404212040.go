@@ -16,3 +16,4 @@ type Product struct {
 	Status      string `gorm:"Not Null" json:"status"`
 }
 
+type Ser

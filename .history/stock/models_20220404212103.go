@@ -16,3 +16,6 @@ type Product struct {
 	Status      string `gorm:"Not Null" json:"status"`
 }
 
+type Service struct{
+	gorm.Model
+}
