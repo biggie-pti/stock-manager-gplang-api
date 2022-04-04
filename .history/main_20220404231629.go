@@ -17,8 +17,7 @@ func main() {
 	defer database.DB.Close()
 
 	api := app.Group("/api")
-	stock.RegisterProduct(api, database.DB)
-	stock.RegisterService(api, database.DB)
+	stock.(api, database.DB)
 
 	log.Fatal(app.Listen(":5000"))
 }
